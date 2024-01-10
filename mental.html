@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Challenge</title>
+  
+  <style>
+      /*Mental game Styling*/
+
+  body {
+    font-family: Arial, sans-serif;
+    text-align: left;
+    font-size: 40px;
+  }
+  
+  h1 {
+    margin-top: 30px;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .grid-item {
+    font-size: 50px;
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+    cursor: pointer;
+  }
+
+  .hidden-audio {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+
+  </style>
+</head>
+<body>
+    <h1>Memory Challenge</h1>
+    <p>Click the boxes to reveal the hidden colors. Try to remember and match them!</p>
+    <p>Timer: <span id="timer">30</span> seconds</p>
+    <p>Attempts: <span id="attempts">0</span></p>
+    <p id="gameOver" style="display: none;">Game Over!</p>
+    <button onclick="restartGame()">Start Over</button>
+    <div class="grid-container" id="grid">
+      <!-- This section will be dynamically generated -->
+    
+      <audio class="hidden-audio" controls autoplay>
+        <source src="images/BONNEY M-JINGLE BELLS.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </div>
+
+  <script>
+    const colors = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', '#E6B333', '#3366E6', '#999966'];
+
+const grid = document.getElementById('grid');
+let firstColor = null;
+let secondColor = null;
+let attempts = 0;
+let timer = 30;
+let gameInterval;
+
+function createGrid() {
+  for (let i = 0; i < colors.length * 2; i++) {
+    const gridItem = document.createElement('div');
+    gridItem.classList.add('grid-item');
+    gridItem.addEventListener('click', handleGridItemClick);
+    grid.appendChild(gridItem);
+  }
+  assignColors();
+  startTimer();
+}
+
+function assignColors() {
+  const gridItems = document.querySelectorAll('.grid-item');
+  const randomColors = colors.concat(colors).sort(() => 0.5 - Math.random());
+
+  gridItems.forEach((item, index) => {
+    item.dataset.color = randomColors[index];
+  });
+}
+
+function handleGridItemClick(event) {
+  const clickedItem = event.target;
+
+  if (clickedItem === firstColor || clickedItem === secondColor) {
+    return;
+  }
+
+  clickedItem.style.backgroundColor = clickedItem.dataset.color;
+
+  if (!firstColor) {
+    firstColor = clickedItem;
+  } else if (!secondColor) {
+    secondColor = clickedItem;
+    attempts++;
+    document.getElementById('attempts').textContent = attempts;
+    checkMatch();
+  }
+}
+
+function checkMatch() {
+  if (firstColor.dataset.color === secondColor.dataset.color) {
+    firstColor.removeEventListener('click', handleGridItemClick);
+    secondColor.removeEventListener('click', handleGridItemClick);
+    resetSelection();
+    checkWin();
+  } else {
+    setTimeout(resetColors, 1000);
+  }
+}
+
+function resetColors() {
+  firstColor.style.backgroundColor = '#ccc';
+  secondColor.style.backgroundColor = '#ccc';
+  resetSelection();
+}
+
+function resetSelection() {
+  firstColor = null;
+  secondColor = null;
+}
+
+function checkWin() {
+  const allItems = document.querySelectorAll('.grid-item');
+  const matchedItems = document.querySelectorAll('.grid-item[style*="background-color"]');
+  
+  if (allItems.length === matchedItems.length) {
+    clearInterval(gameInterval);
+    document.getElementById('gameOver').style.display = 'block';
+  }
+}
+
+function startTimer() {
+  gameInterval = setInterval(() => {
+    timer--;
+    document.getElementById('timer').textContent = timer;
+    if (timer === 0) {
+      clearInterval(gameInterval);
+      endGame();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  const gridItems = document.querySelectorAll('.grid-item');
+  gridItems.forEach(item => {
+    item.removeEventListener('click', handleGridItemClick);
+  });
+
+  const score = document.getElementById('attempts').textContent;
+  document.getElementById('gameOver').innerHTML = `Game Over! Your score: ${100-score}%`;
+  document.getElementById('gameOver').style.display = 'block';
+
+  const startAgainBtn = document.createElement('button');
+  startAgainBtn.textContent = 'Start Again';
+  startAgainBtn.onclick = restartGame;
+  document.body.appendChild(startAgainBtn);
+
+  const quitBtn = document.createElement('button');
+  quitBtn.textContent = 'Quit Game';
+  quitBtn.onclick = quitGame;
+  document.body.appendChild(quitBtn);
+}
+
+function quitGame() {
+  window.location.href = 'worksheet.html'; // Redirect to worksheet.html
+}
+
+function restartGame() {
+  clearInterval(gameInterval);
+  timer = 30;
+  attempts = 0;
+  document.getElementById('timer').textContent = timer;
+  document.getElementById('attempts').textContent = attempts;
+  document.getElementById('gameOver').style.display = 'none';
+
+  const gridItems = document.querySelectorAll('.grid-item');
+  gridItems.forEach(item => {
+    item.style.backgroundColor = '#ccc';
+    item.addEventListener('click', handleGridItemClick);
+  });
+
+  startTimer();
+}
+
+createGrid();
+
+
+  </script>
+</body>
+</html>
