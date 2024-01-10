@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Puzzle Game</title>
+  
+
+  <style>
+    body {
+      font-size: 80px;
+      background: linear-gradient(270deg,#bbb4b0,#b5b9e6,#e4aee9);
+
+    }
+
+    #startButton {
+      background: #160218;
+      color: azure;
+      margin: 0;
+      padding-top: 15px;
+      font-size: 28px;
+      padding-bottom: 15px;
+
+
+    }
+
+
+    .puzzle-piece {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #000;
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #1b0e92;
+  }
+
+  .puzzle-container {
+    color: #fff;
+    background-color: aqua;
+    border: #000;
+    border-radius: 20px;
+  }
+
+  #playAgainButton {
+    padding: 3px;
+    font-size: 80px;
+    background-color: rgb(30, 41, 197);
+    color: #fff;
+  }
+
+  #quitButton {
+    font-size: 80px;
+    background-color: #920e0e;
+    color: #fff;
+    padding: 3px;
+  }
+
+  #timer {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 90px;
+    color: #920e0e;
+  }
+
+  #score {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 85px;
+    color: rgb(4, 78, 4);
+  }
+
+  footer {
+    font-family: 'Times New Roman', Times, serif;
+    color: #1d023f;
+  }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <div class="puzzle-container" id="puzzleContainer">
+      <!-- Puzzle pieces will be generated here -->
+    </div>
+    <button id="startButton">Start Game</button>
+    <div id="timer">Timer: <span id="timerDisplay">30</span>s</div>
+    <div id="score">Score: <span id="scoreDisplay">0</span></div>
+  </div>
+
+  <div id="message-container" style="display: none;">
+    <p id="message-text"></p>
+    <div id="options-container" style="display: none;">
+      <button id="playAgainButton">Play Again</button>
+      <button id="quitButton">Quit Game</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <br><br><br>
+  <footer>
+    Powered by: <u><b>*Benneth*</b></u>
+  </footer>
+</body>
+</html>
