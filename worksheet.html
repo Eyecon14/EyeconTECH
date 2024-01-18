@@ -25,6 +25,91 @@
                 font-size: 60px;
             }
 
+            #chat-container {
+                display: none;
+                --light-color: #fff;
+                height: 450px;
+                width: 310px;
+                background: var(--light-color);
+                position: fixed;
+                bottom: 100px;
+                left: 10px;
+                box-shadow: 0px 0px 15px 0px black;
+                max-width: 400px;
+                margin: 0 auto;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 15px;
+                overflow-y: auto;
+                background-color: #c1e8fa;
+            }
+            #chat-toggle {
+                position: fixed;
+                bottom: 30px;
+                left: 280px;
+                font-style: italic;
+                font-size: medium;
+                color: #fff;
+            }
+            #chat-form {
+                height: 30px;
+                display: flex;
+                padding: 8px 10px;
+                align-items: center;
+                border-top: 1px solid #ccc;
+                background-color: #c1e8fa;
+                align-items: flex-end;
+            }
+            #title {
+                height: 55px;
+                display: flex;
+                align-items: center;
+                padding: 0px 35px;
+                background-color: #0652c0;
+                color: var(--light-color);
+                font-size: 1.5rem;
+                border-radius: 15px;
+                border-color: #433;
+            }
+            #user-input {
+                width: 75%;
+                padding: 8px;
+                margin-top: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 0 23px 0 23px;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 15px;
+                font-style: oblique;
+                font-display: #433;
+            }
+            #send {
+                width: 25%;
+                padding: 8px;
+                margin-top: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 0 23px 0 23px;
+                cursor: pointer;
+                background-color: #0652c0;
+                color: #fff;
+            }
+            #chat-output {
+                padding: 8px;
+                background-color: #c1e8fa;
+                margin: 5px;
+                border-radius: 10px 3px 10x 10px;
+                width: max-content;
+            }
+            #chat-header {
+                background-color: #4CAF50;
+            }
+            #chat-toggle:hover {
+                background-color: #e9d8e6;
+                color: white;
+                text-align: center;
+                cursor: pointer;
+            }
 
             
         </style>
@@ -49,6 +134,16 @@
                 </div>
             </ul>
         </header>
+
+        <button id="chat-toggle" onclick="toggleChat()"><img src="images/chat.png" alt=""></button>
+        <div id="chat-container">
+            <div id="title">Eyecon ChatBot</div>
+            <div id="chat-output"></div>
+            <form id="chat-form">
+                <input type="text" id="user-input" placeholder="Type your message...">
+                <button type="button" id="send" onclick="sendMessage()">Send</button>
+            </form>
+        </div>
         
         <div>
             <a href="tutor.html" class="image-button1">
@@ -66,8 +161,8 @@
             <a href="dictionary.html" class="image-button5">
                 <img src="images/dictionary.png" alt="" width="200" height="200">
             </a>
-            <a href="#" class="image-button6">
-                <img src="images/quiz.png" alt="" width="200" height="200">
+            <a href="aphabets.html" class="image-button6">
+                <img src="images/Quiz-Purchase-Icon-Kids.jpg" alt="" width="200" height="200">
             </a>
             <a href="about.html" class="image-button7">
                 <img src="images/benefits.png" alt="" width="200" height="200">
@@ -90,7 +185,7 @@
             <a href="#" class="image-button3">
                 <img src="images/book.png" alt="" width="200" height="200">
             </a>
-            <a href="#" class="image-button3">
+            <a href="puzzle2.html" class="image-button3">
                 <img src="images/quiz.png" alt="" width="200" height="200">
             </a>
             <a href="learn.html" class="image-button3">
@@ -102,12 +197,72 @@
             <a href="dictionary.html" class="image-button3">
                 <img src="images/4.gif" alt="" width="200" height="200">
             </a>
-            <a href="contact.html" class="image-button3">
+            <a href="mail2.html" class="image-button3">
                 <img src="images/1.gif" alt="" width="200" height="200">
             </a>
         </div>
         
         <br><br><br>
-        <footer>Powered by: Benneth</footer>
+        Powered by: Benneth
+
+        <script>
+                        function toggleChat() {
+                var chatContainer = document.getElementById("chat-container");
+                chatContainer.style.display = (chatContainer.style.display === "none" || chatContainer.style.display === "") ? "block" : "none";
+                if (chatVisible) {
+                    chatBody.style.display = "none";
+                    chatContainer.style.width = "50px";
+                }   else {
+                    chatBody.style.display = "block";
+                    chatContainer.style.width = "300px"
+                }
+                chatVisible = !chatVisible
+            }
+            
+            function sendMessage() {
+                var userInput = document.getElementById("user-input").value;
+                var chatOutput = document.getElementById("chat-output");
+                chatOutput.innerHTML += "<p>User: " + userInput + "</p>";
+                setTimeout(function() {
+                var botResponse;
+                if (userInput.toLowerCase().includes("hello")) {
+                    botResponse= "Bot: Hi there! How may I be of help today?";
+                } else if (userInput.toLowerCase().includes("how are you")) {
+                    botResponse= "Bot: I'm just a bot." + 
+                    "How may I be of help today?";
+                } else if (userInput.toLowerCase().includes("hi")) {
+                    botResponse= "Bot: Hello! How may I help you?";
+                } else if (userInput.toLowerCase().includes("60x60")) {
+                    botResponse= "Bot: multiplying... Ans: 3,600";
+                } else if (userInput.toLowerCase().includes("thank you")) {
+                    botResponse= "Bot: You are warmly welcome.";
+                } else if (userInput.toLowerCase().includes("who created this website?")) {
+                    botResponse= "Bot: This site was created by EyeconTech Team. Contact them on +233533420206. Thanks for asking...";
+                } else if (userInput.toLowerCase().includes("what is your function?")) {
+                    botResponse= "Bot: I was created to provide aid to you.";
+                } else if (userInput.toLowerCase().includes("who created you")) {
+                    botResponse= "Bot: I was designed by Benneth.";
+                } else if (userInput.toLowerCase().includes("i need help")) {
+                    botResponse= "Bot: Go ahead! I am here to help...";
+                } else if (userInput.toLowerCase().includes("can you do anything")) {
+                    botResponse= "Bot: I may do my best to help";
+                } else if (userInput.toLowerCase().includes("")) {
+                    botResponse= "Bot: Please come again!";
+                } else { 
+                    botResponse= "Bot: Thanks for your message... Contact EyeconTECH for real-time conversation (+233533420206)";
+                }
+                chatOutput.innerHTML += "<p>" + botResponse + "</p>"; 
+                chatBody.scrollTop = chatBody.scrollHeight;   
+                }, 900)
+                
+
+                document.getElementById("user-input").value = "";
+            }
+        </script>
+        <footer>
+            <p>&copy; 2024 EyeconTECH. All Rights Reserved.</p>
+        </footer>
+        </script>
+
         </body>
 </html>

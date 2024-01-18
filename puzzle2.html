@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Based Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background: linear-gradient(270deg, #00f,#4caf50,#ddd);
+        }
+        #timer {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        #quiz-container {
+            margin-top: 20px;
+        }
+        .question-container {
+            margin-bottom: 15px;
+        }
+        .option-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .option {
+            width: 120px;
+            height: 40px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+        .selected {
+            background-color: #00f;
+            color: #fff;
+        }
+        #buttons-container {
+            margin-top: 20px;
+        }
+        #submit-button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>S.B Quiz</h1>
+    <h2>NB: Pass Mark: 15 marks</h2>
+    <h2>You can only play it once.</h2>
+    <h3>After completing, screenshot your score to <b><u>0507326886</u></b></h3>
+    <div id="timer">Time Left: <span id="countdown">1:00</span></div>
+
+    <div id="quiz-container"></div>
+
+    <div id="buttons-container">
+        <button id="start-game" onclick="startGame()">Start Game</button>
+        <button id="start-again" onclick="startAgain()" style="display: none;">Start Again</button>
+        <button id="quit-game" onclick="quitGame()" style="display: none;">Quit Game</button>
+        <button id="submit-button" onclick="submitAnswers()" style="display: none;">Submit</button>
+    </div>
+
+    <script>
+        const quizContainer = document.getElementById("quiz-container");
+        const countdownElement = document.getElementById("countdown");
+        const startGameButton = document.getElementById("start-game");
+        const startAgainButton = document.getElementById("start-again");
+        const quitGameButton = document.getElementById("quit-game");
+        const submitButton = document.getElementById("submit-button");
+        const totalTimeInSeconds = 60; // 1 minute
+        let timeRemaining = totalTimeInSeconds;
+        let gameStarted = false;
+
+        window.addEventListener('beforeunload', function (e) {
+            // Cancel the event
+            e.preventDefault();
+            // Chrome requires returnValue to be set
+            e.returnValue = '';
+        });
+
+                // Check if the user has played the game in the last 24 hours
+                const lastPlayedTimestamp = localStorage.getItem('lastPlayedTimestamp');
+        const currentTime = new Date().getTime();
+
+        if (!lastPlayedTimestamp || currentTime - lastPlayedTimestamp > 24 * 60 * 60 * 1000) {
+            // User hasn't played in the last 24 hours, allow access to the game
+            alert('Welcome to the game!');
+
+            // Save the current timestamp to localStorage
+            localStorage.setItem('lastPlayedTimestamp', currentTime);
+        } else {
+            // User has played in the last 24 hours, disable access
+            alert('Sorry, you can only play once every 24 hours.');
+            // Redirect the user or perform other actions as needed
+            window.location.href = 'worksheet.html'; // Redirect to another page
+        }
+
+        const questions = [
+            { question: "*** RE-ARRANGE THE FRUIT NAMES ***", options: [], answer: "", selectedAnswer: null },
+            { question: "1. What is the original word for 'pleap'?", options: ["apple", "banana", "orange"], answer: "apple", selectedAnswer: null },
+            { question: "2. What is the original word for 'anaban'?", options: ["apple", "banana", "orange"], answer: "banana", selectedAnswer: null },
+            { question: "3. What is the original word for 'eagron'?", options: ["grape", "kiwi", "orange"], answer: "orange", selectedAnswer: null },
+            { question: "4. What is the original word for 'awpawp'?", options: ["pinneapple", "pawpaw", "grape"], answer: "pawpaw", selectedAnswer: null },
+            { question: "5. What is the original word for 'rryche'?", options: ["pear", "kiwi", "cherry"], answer: "cherry", selectedAnswer: null },
+
+            { question: "*** CHOOSE THE CORRECT ANSWER ***", options: [], answer: "", selectedAnswer: null },
+            { question: "6. Things around us are called?", options: ["living things", "environment", "animals"], answer: "environment", selectedAnswer: null },
+            { question: "7. Winning a scholarship is an ...... of SB Quiz?", options: ["advantage", "effect", "answer"], answer: "advantage", selectedAnswer: null },
+            { question: "8. ..... is the process of acquiring knowledge.", options: ["book", "education", "playing"], answer: "education", selectedAnswer: null },
+            { question: "9. Who created the SB Quiz?", options: ["Eyecon", "EyeconTECH", "Benneth"], answer: "Benneth", selectedAnswer: null },
+            { question: "10. Who created the world?", options: ["God", "Man", "Adam"], answer: "cherry", selectedAnswer: null },
+
+            { question: "*** CRITICAL THINKING ***", options: [], answer: "", selectedAnswer: null },
+            { question: "11. 50 ÷ 2 + 5 - 15?", options: ["22", "15", "5"], answer: "15", selectedAnswer: null },
+            { question: "12. 56 - 22 + 15 ÷ 15?", options: ["31", "3", "15"], answer: "31", selectedAnswer: null },
+            { question: "13. 100 - 99 + 11 ÷ 1 + 5 - 15?", options: ["1", "3", "2"], answer: "2", selectedAnswer: null },
+            { question: "14. 2 X 3 X 3 X 3?", options: ["18", "51", "54"], answer: "54", selectedAnswer: null },
+            { question: "15. 660 - 320 + 75 + 75 + 10?", options: ["500", "415", "495"], answer: "500", selectedAnswer: null },
+            { question: "16. 100 + 900 - 1000 x 2 + 1000?", options: ["10", "1000", "0"], answer: "0", selectedAnswer: null },
+            { question: "17. 51 + 9 + 50 ÷ 2?", options: ["85", "60", "55"], answer: "54", selectedAnswer: null },
+            { question: "18. 200 - 100 x 2 ÷ 2?", options: ["200", "150", "100"], answer: "54", selectedAnswer: null },
+            { question: "19. 51 + 29 + 45 ÷ 3?", options: ["85", "95", "42"], answer: "95", selectedAnswer: null },
+            { question: "20. 55 + 9 - 16 ÷ 4?", options: ["12", "45", "60"], answer: "60", selectedAnswer: null },
+
+            // Add more questions as needed
+        ];
+
+        let marks = 0;
+
+        function displayQuestions() {
+            quizContainer.innerHTML = "";
+            submitButton.style.display = "inline-block";
+
+            questions.forEach((q, index) => {
+                const questionContainer = document.createElement("div");
+                questionContainer.classList.add("question-container");
+                questionContainer.innerHTML = `<div>${q.question}</div>`;
+
+                const optionContainer = document.createElement("div");
+                optionContainer.classList.add("option-container");
+
+                q.options.forEach(option => {
+                    const optionElement = document.createElement("div");
+                    optionElement.classList.add("option");
+                    optionElement.textContent = option;
+                    optionElement.addEventListener("click", () => selectAnswer(index, optionElement));
+                    optionContainer.appendChild(optionElement);
+                });
+
+                questionContainer.appendChild(optionContainer);
+                quizContainer.appendChild(questionContainer);
+            });
+        }
+
+        function selectAnswer(questionIndex, selectedOptionElement) {
+            if (!gameStarted || questions[questionIndex].selectedAnswer !== null) return;
+
+            questions[questionIndex].selectedAnswer = selectedOptionElement.textContent;
+            selectedOptionElement.classList.add("selected");
+
+            // Disable other options for the same question
+            const otherOptions = selectedOptionElement.parentElement.children;
+            Array.from(otherOptions).forEach(option => {
+                if (option !== selectedOptionElement) {
+                    option.style.pointerEvents = "none";
+                }
+            });
+        }
+
+        function submitAnswers() {
+            marks = 0;
+            questions.forEach(q => {
+                if (q.selectedAnswer === q.answer) {
+                    marks++;
+                }
+            });
+
+            revealAnswers();
+        }
+
+        function revealAnswers() {
+            alert(`Your marks: ${marks}/${questions.length}`);
+
+            // Optionally, you can display correct answers or perform other actions here
+
+            // Reset the timer, clear the quiz container, and show appropriate buttons
+            clearInterval(timerInterval);
+            countdownElement.textContent = "0:00";
+            quizContainer.innerHTML = "";
+            startGameButton.style.display = "none";
+            startAgainButton.style.display = "inline-block";
+            quitGameButton.style.display = "inline-block";
+            submitButton.style.display = "none";
+            gameStarted = false;
+        }
+
+        function startGame() {
+            displayQuestions();
+            startGameButton.style.display = "none";
+            startAgainButton.style.display = "none";
+            quitGameButton.style.display = "none";
+            submitButton.style.display = "inline-block";
+            gameStarted = true;
+
+            // Start the countdown timer
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function startAgain() {
+            startGameButton.style.display = "inline-block";
+            startAgainButton.style.display = "none";
+            quitGameButton.style.display = "none";
+            submitButton.style.display = "none";
+        }
+
+        function quitGame() {
+            window.location.href = "worksheet.html";
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            countdownElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            if (timeRemaining === 0) {
+                submitAnswers();
+            } else {
+                timeRemaining--;
+            }
+        }
+    </script>
+</body>
+</html>

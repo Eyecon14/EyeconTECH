@@ -317,7 +317,29 @@ footer {
     transform: scale(1.05);
 }
 
-
+#user-input {
+    width: 76%;
+    padding: 8px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 0 3px 0 3px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-style: oblique;
+    font-display: #433;
+}
+#send {
+    width: 22%;
+    padding: 8px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 0 3px 0 3px;
+    cursor: pointer;
+    background-color: #0652c0;
+    color: #fff;
+}
   
 
 

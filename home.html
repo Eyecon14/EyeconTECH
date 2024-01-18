@@ -15,7 +15,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="dashboard.html">Get Started...</a></li>
+                <li><a href="worksheet.html">Get Started...</a></li>
             </ul>
         </nav>
     </header>
@@ -84,13 +84,76 @@
                 <p>Address: Konongo, Accra, Ghana</p>
             
         </section>
+
+        <button id="chat-toggle" onclick="toggleChat()"><img src="images/chat.png" alt="" width="40px"></button>
+        <div id="chat-container">
+            <div id="title">Eyecon ChatBot</div>
+            <div id="chat-output"></div>
+            <form id="chat-form">
+                <input type="text" id="user-input" placeholder="Type your message...">
+                <button type="button" id="send" onclick="sendMessage()">Send</button>
+            </form>
+        </div>
+
     </main>
-    <div class="gif">
-        <img src="images/1.gif" alt="" width="360" height="300">
-    </div>
     <footer>
         <p>&copy; 2024 EyeconTECH. All Rights Reserved.</p>
     </footer>
+
+    <script>
+                                function toggleChat() {
+                var chatContainer = document.getElementById("chat-container");
+                chatContainer.style.display = (chatContainer.style.display === "none" || chatContainer.style.display === "") ? "block" : "none";
+                if (chatVisible) {
+                    chatBody.style.display = "none";
+                    chatContainer.style.width = "50px";
+                }   else {
+                    chatBody.style.display = "block";
+                    chatContainer.style.width = "300px"
+                }
+                chatVisible = !chatVisible
+            }
+            
+            function sendMessage() {
+                var userInput = document.getElementById("user-input").value;
+                var chatOutput = document.getElementById("chat-output");
+                chatOutput.innerHTML += "<p>User: " + userInput + "</p>";
+                setTimeout(function() {
+                var botResponse;
+                if (userInput.toLowerCase().includes("hello")) {
+                    botResponse= "Bot: Hi there! How may I be of help today?";
+                } else if (userInput.toLowerCase().includes("how are you")) {
+                    botResponse= "Bot: I'm just a bot." + 
+                    "How may I be of help today?";
+                } else if (userInput.toLowerCase().includes("hi")) {
+                    botResponse= "Bot: Hello! How may I help you?";
+                } else if (userInput.toLowerCase().includes("who created you?")) {
+                    botResponse= "Bot: I was designed by Benneth.";
+                } else if (userInput.toLowerCase().includes("60x60")) {
+                    botResponse= "Bot: multiplying... Ans: 3,600";
+                } else if (userInput.toLowerCase().includes("thank you")) {
+                    botResponse= "Bot: You are warmly welcome.";
+                } else if (userInput.toLowerCase().includes("who created this website?")) {
+                    botResponse= "Bot: This site was created by EyeconTech Team. Contact them on +233533420206. Thanks for asking...";
+                } else if (userInput.toLowerCase().includes("what is your function?")) {
+                    botResponse= "Bot: I was created to provide aid to you.";
+                } else if (userInput.toLowerCase().includes("i need help")) {
+                    botResponse= "Bot: Go ahead! I am here to help...";
+                } else if (userInput.toLowerCase().includes("can you do anything")) {
+                    botResponse= "Bot: I may do my best to help";
+                } else if (userInput.toLowerCase().includes("")) {
+                    botResponse= "Bot: Please come again!";
+                } else { 
+                    botResponse= "Bot: Thanks for your message... Contact EyeconTECH for real-time conversation (+233533420206)";
+                }
+                chatOutput.innerHTML += "<p>" + botResponse + "</p>"; 
+                chatBody.scrollTop = chatBody.scrollHeight;   
+                }, 900)
+                
+
+                document.getElementById("user-input").value = "";
+            }
+    </script>
 </body>
 
 </html>
